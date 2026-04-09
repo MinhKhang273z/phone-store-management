@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=2670&auto=format&fit=crop" alt="E-commerce Cover" width="100%" style="max-height: 400px; object-fit: cover; border-radius:15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+
   <br/>
   <h1>📱 Hệ Thống Quản Lý Cửa Hàng Điện Thoại</h1>
   <p>Một ứng dụng web thương mại điện tử trọn vẹn giúp dễ dàng quản lý sản phẩm, đơn hàng và trải nghiệm mua sắm của khách hàng, được xây dựng với <b>Spring Boot</b> và <b>ReactJS</b>.</p>
