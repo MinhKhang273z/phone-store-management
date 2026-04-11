@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { register } from '../services/api';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -8,11 +9,21 @@ const Register = () => {
   const navigate = useNavigate();
 
   // Xử lý khi nhấn nút Đăng ký
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    if (username && email && password) {
+    try {
+      // Gọi API đăng ký
+      await register(username, email, password);
+      
+      alert("Đăng ký thành công! Hãy đăng nhập.");
       // Đăng ký thành công, chuyển hướng người dùng tới trang Đăng nhập
       navigate('/login');
+    } catch (error) {
+       if (error.response && error.response.data) {
+         alert("Lỗi đăng ký: " + error.response.data);
+       } else {
+         alert("Đăng ký thất bại!");
+       }
     }
   };
 
@@ -54,7 +65,7 @@ const Register = () => {
           />
         </div>
 
-        <button type="submit" style={{ padding: '10px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '1rem' }}>
+        <button type="submit" className="btn-primary" style={{ padding: '10px', width: '100%', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '1rem' }}>
           Đăng ký
         </button>
       </form>

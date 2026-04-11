@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { login } from '../services/api';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -7,11 +8,30 @@ const Login = () => {
   const navigate = useNavigate();
 
   // Xử lý khi nhấn nút Đăng nhập
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (username && password) {
-      // Chuyển hướng về trang chủ
-      navigate('/');
+    try {
+      // Gọi API đăng nhập
+      const response = await login(username, password);
+      
+      // Nếu thành công (status 200)
+      if (response.data && response.data.token) {
+        // Lưu token và username vào localStorage
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("username", response.data.username);
+        
+        alert("Đăng nhập thành công");
+        
+        // Chuyển hướng về trang chủ
+        // Sử dụng window.location.href để load lại state thẻ Navbar
+        window.location.href = '/';
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        alert("Tài khoản hoặc mật khẩu không chính xác!");
+      } else {
+        alert("Có lỗi xảy ra khi kết nối máy chủ");
+      }
     }
   };
 
@@ -42,7 +62,7 @@ const Login = () => {
           />
         </div>
 
-        <button type="submit" style={{ padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '1rem' }}>
+        <button type="submit" className="btn-primary" style={{ padding: '10px', width: '100%', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '1rem' }}>
           Đăng nhập
         </button>
       </form>

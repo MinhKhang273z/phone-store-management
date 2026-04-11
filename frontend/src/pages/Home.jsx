@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import './Home.css';
-
-// Tấm banner quảng cáo (có thể là ảnh gốc lớn hoặc banner.png)
 import bannerImg from '../assets/phone/banner.png';
 
 // Tự động nạp tất cả các file ảnh nằm trong thư mục ../assets/phone/
@@ -24,7 +22,7 @@ for (const path in imageModules) {
   allProducts.push({
     id: countId++,
     name: baseName.toUpperCase(),
-    // Tạo giá ngẫu nhiên giả lập hoặc giá cứng
+    // Tạo giá ngẫu nhiên giả lập từ 10M đến 30M
     price: (Math.floor(Math.random() * 20) + 10) + ',000,000 đ', 
     image: imageModules[path].default || imageModules[path]
   });
@@ -60,7 +58,7 @@ const Home = ({ searchTerm }) => {
       </h1>
 
       <div className="home-section-header">
-        <h2>Gợi ý hôm nay</h2>
+        <h2>Sản phẩm nổi bật</h2>
       </div>
 
       {/* Danh sách sản phẩm dạng Grid */}
