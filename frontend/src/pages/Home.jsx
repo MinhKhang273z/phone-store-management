@@ -1,39 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProductCard from '../components/ProductCard';
+import { getAllProducts } from '../services/api'; // Import hàm gọi API đã tạo ở api.js
 import './Home.css';
 import bannerImg from '../assets/phone/banner.png';
 
-// Tự động nạp tất cả các file ảnh nằm trong thư mục ../assets/phone/
-const imageModules = import.meta.glob('../assets/phone/*.{jpg,png,jpeg}', { eager: true });
-
-// Xây dựng mảng dữ liệu sản phẩm từ danh sách các file ảnh
-const allProducts = [];
-let countId = 1;
-
-for (const path in imageModules) {
-  const filename = path.split('/').pop();
-  
-  // Loại bỏ các hình ảnh không phải là điện thoại (ví dụ: banner hoặc hero)
-  if (filename === 'banner.png' || filename === 'hero.png') continue;
-  
-  // Tạo tên sản phẩm cơ bản từ tên file
-  const baseName = filename.replace(/\.[^/.]+$/, "").replace(/-/g, ' ');
-  
-  allProducts.push({
-    id: countId++,
-    name: baseName.toUpperCase(),
-    // Tạo giá ngẫu nhiên giả lập từ 10M đến 30M
-    price: (Math.floor(Math.random() * 20) + 10) + ',000,000 đ', 
-    image: imageModules[path].default || imageModules[path]
-  });
-}
-
 const Home = ({ searchTerm }) => {
+  // 1. Quản lý danh sách sản phẩm thực tế từ Database
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
   // Quản lý số lượng hiển thị cho nút "Xem thêm"
   const [displayCount, setDisplayCount] = useState(12);
 
-  // Lọc sản phẩm theo từ khóa
-  const filteredProducts = allProducts.filter(product =>
+  // 2. useEffect để gọi API ngay khi trang Home vừa load
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        // Gọi hàm từ api.js (trỏ tới http://localhost:8081/api/products)
+        const data = await getAllProducts(); 
+        setProducts(data);
+      } catch (error) {
+        console.error("Lỗi kết nối Backend:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  // 3. Lọc sản phẩm theo từ khóa tìm kiếm (Search)
+  const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -47,40 +44,45 @@ const Home = ({ searchTerm }) => {
 
   return (
     <div className="home-container">
-      {/* Tấm banner quảng cáo ở phía trên */}
+      {/* Tấm banner quảng cáo */}
       <div className="banner-wrapper">
         <img src={bannerImg} alt="Quảng cáo Phone Store" className="home-banner" />
       </div>
       
-      {/* Lời chào mừng */}
-      <h1 className="home-title">
-        Chào mừng đến với Phone Store
-      </h1>
+      <h1 className="home-title">Chào mừng đến với Phone Store</h1>
 
       <div className="home-section-header">
-        <h2>Sản phẩm nổi bật</h2>
+        <h2>Sản phẩm nổi bật từ hệ thống</h2>
       </div>
 
-      {/* Danh sách sản phẩm dạng Grid */}
-      <div className="product-grid">
-        {productsToDisplay.length > 0 ? (
-          productsToDisplay.map(product => (
-            <ProductCard key={product.id} product={product} />
-          ))
-        ) : (
-          <p className="no-products">
-            Không tìm thấy sản phẩm nào phù hợp!
-          </p>
-        )}
-      </div>
+      {/* Hiển thị trạng thái đang tải */}
+      {loading ? (
+        <div className="loading">Đang kết nối tới máy chủ (Cổng 8081)...</div>
+      ) : (
+        <>
+          {/* Danh sách sản phẩm dạng Grid */}
+          <div className="product-grid">
+            {productsToDisplay.length > 0 ? (
+              productsToDisplay.map(product => (
+                // Lưu ý: Backend dùng thuộc tính imageUrl, đảm bảo ProductCard nhận đúng props
+                <ProductCard key={product.id} product={product} />
+              ))
+            ) : (
+              <p className="no-products">
+                Không tìm thấy sản phẩm nào phù hợp trong hệ thống!
+              </p>
+            )}
+          </div>
 
-      {/* Nút Xem thêm */}
-      {displayCount < filteredProducts.length && (
-        <div className="load-more-container">
-          <button className="btn-primary load-more-btn" onClick={handleLoadMore}>
-            Xem thêm
-          </button>
-        </div>
+          {/* Nút Xem thêm */}
+          {displayCount < filteredProducts.length && (
+            <div className="load-more-container">
+              <button className="btn-primary load-more-btn" onClick={handleLoadMore}>
+                Xem thêm
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
