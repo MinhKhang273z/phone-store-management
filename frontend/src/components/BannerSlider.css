@@ -37,6 +37,13 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /* Làm nét hình ảnh */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    filter: contrast(1.02) brightness(1.02);
+    /* Chống mờ khi chuyển cảnh */
+    backface-visibility: hidden;
+    transform: translateZ(0);
 }
 
 /* Các nút điều hướng và chấm chỉ số giữ nguyên như cũ */

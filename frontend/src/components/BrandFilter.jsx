@@ -6,7 +6,7 @@ const logoModules = import.meta.glob('../assets/logophone/*.{png,jpg,jpeg,svg,we
 
 const BrandFilter = ({ selectedBrand, onSelectBrand }) => {
     // Danh sách các thương hiệu mặc định (phòng trường hợp thư mục ảnh trống)
-    const defaultBrands = ['Iphone', 'Samsung', 'Oppo', 'Xiaomi', 'Vivo', 'Realme', 'Nokia'];
+    const defaultBrands = ['Iphone', 'Samsung', 'Oppo', 'Xiaomi', 'Vivo', 'Realme', 'Nokia', 'Motorola','Tecno'];
 
     // Chuyển đổi module ảnh thành danh sách có tên thương hiệu
     const brandLogos = Object.entries(logoModules).map(([path, module]) => {

@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 import './Navbar.css';
 
 const Navbar = ({ searchTerm, setSearchTerm }) => {
+  const { totalItems } = useCart();
   const navigate = useNavigate();
   // Kiểm tra user có trong localStorage hay không
   const username = localStorage.getItem('username');
@@ -38,7 +40,7 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
           {/* Giỏ hàng */}
           <Link to="/cart" className="navbar-cart">
             <span className="cart-icon">🛒</span>
-            <span className="cart-badge">0</span>
+            <span className="cart-badge">{totalItems}</span>
           </Link>
 
           <span className="navbar-divider"></span>

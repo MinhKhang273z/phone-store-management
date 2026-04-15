@@ -1,13 +1,26 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 import './ProductCard.css';
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
-    alert(`🛒 Đã thêm "${product.name}" vào giỏ hàng thành công!`);
+    
+    // Kiểm tra đã đăng nhập chưa
+    const username = localStorage.getItem('username');
+    if (!username) {
+      alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!');
+      navigate('/login');
+      return;
+    }
+
+    addToCart(product);
+    // Hiệu ứng nhẹ hoặc thông báo cho người dùng
+    alert(`🎯 Đã thêm "${product.name}" vào giỏ hàng!`);
   };
 
   const handleViewDetail = (e) => {

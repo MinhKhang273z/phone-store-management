@@ -41,7 +41,7 @@ const products = Object.entries(imageModules).map(([path, module], index) => {
 // Loại bỏ những file không phải là điện thoại (như banner hoặc logo hãng)
 const filteredProducts = products.filter(p => {
   const nameLower = p.name.toLowerCase();
-  const brands = ['Iphone', 'samsung', 'oppo', 'xiaomi', 'vivo', 'realme', 'nokia', 'banner', 'honor', 'asus', 'acer', 'hp', 'dell', 'lenovo', 'msi'];
+  const brands = ['iphone', 'samsung', 'oppo', 'xiaomi', 'vivo', 'realme', 'nokia', 'motorola', 'tecno'];
 
   // Nếu tên sản phẩm CHỈ là tên thương hiệu (không có model) thì loại bỏ
   const isJustBrand = brands.includes(nameLower);

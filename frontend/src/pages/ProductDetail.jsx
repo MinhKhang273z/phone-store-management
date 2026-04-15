@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 import productsData from '../data/products';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { addToCart } = useCart();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -20,7 +22,29 @@ const ProductDetail = () => {
     }, [id]);
 
     const handleAddToCart = () => {
-        alert(`🎉 Chúc mừng! Đã thêm "${product.name}" vào giỏ hàng thành công.`);
+        // Kiểm tra đã đăng nhập chưa
+        const username = localStorage.getItem('username');
+        if (!username) {
+            alert('Vui lòng đăng nhập để thực hiện mua hàng!');
+            navigate('/login');
+            return;
+        }
+
+        addToCart(product);
+        alert(`🎯 Đã thêm "${product.name}" vào giỏ hàng của bạn!`);
+    };
+
+    const handleBuyNow = () => {
+        // Kiểm tra đã đăng nhập chưa
+        const username = localStorage.getItem('username');
+        if (!username) {
+            alert('Vui lòng đăng nhập để thực hiện mua hàng!');
+            navigate('/login');
+            return;
+        }
+
+        addToCart(product);
+        navigate('/cart');
     };
 
     if (loading) return (
@@ -87,7 +111,7 @@ const ProductDetail = () => {
                       </div>
 
                       <div className="pd-cta">
-                          <button className="btn-buy-now" onClick={handleAddToCart}>
+                          <button className="btn-buy-now" onClick={handleBuyNow}>
                               <span className="btn-label">MUA NGAY</span>
                               <span className="btn-subtext">Giao nhanh từ 2 giờ hoặc nhận tại cửa hàng</span>
                           </button>
