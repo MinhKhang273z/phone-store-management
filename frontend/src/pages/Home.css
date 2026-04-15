@@ -1,74 +1,121 @@
 .home-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding-bottom: 40px;
+  padding: 40px 20px;
 }
 
-.banner-wrapper {
-  margin-bottom: 20px;
-  width: 100%;
-}
-
-.home-banner {
-  width: 100%;
-  max-height: 400px;
-  object-fit: cover;
-  border-radius: 4px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+.home-header {
+  text-align: center;
+  margin-bottom: 50px;
 }
 
 .home-title {
-  text-align: center;
-  font-size: 2rem;
-  margin: 20px 0 40px;
-  color: #333;
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--text-color);
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
 }
 
-.home-section-header {
-  background-color: #fff;
-  padding: 15px 20px;
-  border-bottom: 2px solid #ee4d2d; /* Viền đỏ cam nổi bật */
-  margin-bottom: 20px;
-  text-transform: uppercase;
+.home-subtitle {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  font-weight: 400;
 }
 
-.home-section-header h2 {
-  font-size: 1.2rem;
-  color: #ee4d2d;
-  margin: 0;
+.results-info {
+  margin-bottom: 24px;
+}
+
+.results-info p {
+  color: var(--text-secondary);
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 0;
+  color: var(--text-secondary);
+}
+
+.loading-state .spinner {
+  margin-bottom: 16px;
 }
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 15px;
-  padding: 0 10px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
 }
 
-.no-products {
+.no-results {
   text-align: center;
-  grid-column: 1 / -1;
-  padding: 40px;
-  font-size: 1.2rem;
-  color: #666;
+  padding: 80px 0;
+  background-color: #fff;
+  border-radius: var(--border-radius);
+  border: 1px dashed #d1d1d6;
 }
 
-.load-more-container {
+.no-results-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.no-results h3 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  color: var(--text-color);
+}
+
+.no-results p {
+  color: var(--text-secondary);
+}
+
+.load-more-section {
   display: flex;
   justify-content: center;
-  margin-top: 40px;
+  margin-top: 60px;
 }
 
 .load-more-btn {
-  padding: 12px 40px;
+  padding: 16px 48px;
   font-size: 1rem;
-  background-color: #fff;
-  color: #555;
-  border: 1px solid #ccc;
+  font-weight: 600;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border: 1px solid #d1d1d6;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: var(--transition);
 }
 
 .load-more-btn:hover {
-  background-color: #f8f8f8;
-  color: #333;
-  border-color: #999;
+  background-color: var(--text-color);
+  color: #fff;
+  border-color: var(--text-color);
+}
+
+@media (max-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-title {
+    font-size: 2.2rem;
+  }
+  .home-subtitle {
+    font-size: 1rem;
+  }
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+  }
+  .home-container {
+    padding: 24px 12px;
+  }
 }

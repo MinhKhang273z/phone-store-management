@@ -1,89 +1,93 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from '../components/ProductCard';
-import { getAllProducts } from '../services/api'; // Import hàm gọi API đã tạo ở api.js
+import BannerSlider from '../components/BannerSlider';
+import BrandFilter from '../components/BrandFilter';
+import productsData from '../data/products';
 import './Home.css';
-import bannerImg from '../assets/phone/banner.png';
 
 const Home = ({ searchTerm }) => {
-  // 1. Quản lý danh sách sản phẩm thực tế từ Database
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  
-  // Quản lý số lượng hiển thị cho nút "Xem thêm"
   const [displayCount, setDisplayCount] = useState(12);
+  const [selectedBrand, setSelectedBrand] = useState('All');
 
-  // 2. useEffect để gọi API ngay khi trang Home vừa load
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        // Gọi hàm từ api.js (trỏ tới http://localhost:8081/api/products)
-        const data = await getAllProducts(); 
-        setProducts(data);
-      } catch (error) {
-        console.error("Lỗi kết nối Backend:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    // Giả lập thời gian load để có trải nghiệm mượt mà
+    const timer = setTimeout(() => {
+      setProducts(productsData);
+      setLoading(false);
+    }, 500);
+    return () => clearTimeout(timer);
   }, []);
 
-  // 3. Lọc sản phẩm theo từ khóa tìm kiếm (Search)
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Lọc sản phẩm theo từ khóa tìm kiếm và thương hiệu
+  const filteredProducts = products.filter(product => {
+    const matchesSearch = product.name.toLowerCase().includes((searchTerm || "").toLowerCase());
+    const matchesBrand = selectedBrand === 'All' || product.name.toLowerCase().includes(selectedBrand.toLowerCase());
+    return matchesSearch && matchesBrand;
+  });
 
-  // Sản phẩm sẽ được render dựa trên displayCount
   const productsToDisplay = filteredProducts.slice(0, displayCount);
 
-  // Xử lý khi nhấn nút xem thêm
   const handleLoadMore = () => {
     setDisplayCount(prev => prev + 12);
   };
 
   return (
     <div className="home-container">
-      {/* Tấm banner quảng cáo */}
-      <div className="banner-wrapper">
-        <img src={bannerImg} alt="Quảng cáo Phone Store" className="home-banner" />
-      </div>
-      
-      <h1 className="home-title">Chào mừng đến với Phone Store</h1>
+      <header className="home-header">
+        <h1 className="home-title">Siêu thị Điện thoại</h1>
+        <p className="home-subtitle">Trải nghiệm công nghệ đỉnh cao, giá cả cực kỳ ưu đãi</p>
+      </header>
 
-      <div className="home-section-header">
-        <h2>Sản phẩm nổi bật từ hệ thống</h2>
-      </div>
+      <BannerSlider />
 
-      {/* Hiển thị trạng thái đang tải */}
-      {loading ? (
-        <div className="loading">Đang kết nối tới máy chủ (Cổng 8081)...</div>
-      ) : (
-        <>
-          {/* Danh sách sản phẩm dạng Grid */}
-          <div className="product-grid">
-            {productsToDisplay.length > 0 ? (
-              productsToDisplay.map(product => (
-                // Lưu ý: Backend dùng thuộc tính imageUrl, đảm bảo ProductCard nhận đúng props
-                <ProductCard key={product.id} product={product} />
-              ))
-            ) : (
-              <p className="no-products">
-                Không tìm thấy sản phẩm nào phù hợp trong hệ thống!
-              </p>
-            )}
+      <BrandFilter 
+        selectedBrand={selectedBrand} 
+        onSelectBrand={(brand) => {
+          setSelectedBrand(brand);
+          setDisplayCount(12); // Reset số lượng hiển thị khi đổi bộ lọc
+        }} 
+      />
+
+      <div className="home-content">
+        {loading ? (
+          <div className="loading-state">
+            <div className="spinner"></div>
+            <p>Đang chuẩn bị sản phẩm cho bạn...</p>
           </div>
-
-          {/* Nút Xem thêm */}
-          {displayCount < filteredProducts.length && (
-            <div className="load-more-container">
-              <button className="btn-primary load-more-btn" onClick={handleLoadMore}>
-                Xem thêm
-              </button>
+        ) : (
+          <>
+            <div className="results-info">
+              {searchTerm && (
+                <p>Tìm thấy <strong>{filteredProducts.length}</strong> kết quả cho "{searchTerm}"</p>
+              )}
             </div>
-          )}
-        </>
-      )}
+
+            {productsToDisplay.length > 0 ? (
+              <div className="product-grid">
+                {productsToDisplay.map(product => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            ) : (
+              <div className="no-results">
+                <div className="no-results-icon">🔍</div>
+                <h3>Không tìm thấy sản phẩm nào</h3>
+                <p>Vui lòng thử lại với từ khóa khác.</p>
+              </div>
+            )}
+
+            {displayCount < filteredProducts.length && (
+              <div className="load-more-section">
+                <button className="load-more-btn" onClick={handleLoadMore}>
+                  Khám phá thêm
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };

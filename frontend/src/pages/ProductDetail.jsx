@@ -1,52 +1,103 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getProductById } from '../services/api';
-import './ProductDetail.css'; // Bạn có thể tạo file CSS này để trang trí
+import productsData from '../data/products';
+import './ProductDetail.css';
 
 const ProductDetail = () => {
-    // 1. Lấy ID sản phẩm từ thanh địa chỉ (URL)
     const { id } = useParams();
     const navigate = useNavigate();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // 2. Gọi API lấy chi tiết sản phẩm theo ID
     useEffect(() => {
-        const fetchDetail = async () => {
-            try {
-                setLoading(true);
-                const data = await getProductById(id);
-                setProduct(data);
-            } catch (error) {
-                console.error("Không thể lấy chi tiết sản phẩm:", error);
-            } finally {
-                setLoading(false);
-            }
+        const findProduct = () => {
+            const found = productsData.find(p => p.id === parseInt(id));
+            setProduct(found);
+            setLoading(false);
         };
-        fetchDetail();
+        findProduct();
+        window.scrollTo(0, 0);
     }, [id]);
 
-    if (loading) return <div className="loading">Đang tải thông tin sản phẩm...</div>;
-    if (!product) return <div className="error">Không tìm thấy sản phẩm!</div>;
+    const handleAddToCart = () => {
+        alert(`🎉 Chúc mừng! Đã thêm "${product.name}" vào giỏ hàng thành công.`);
+    };
+
+    if (loading) return (
+      <div className="pd-loading">
+        <div className="spinner"></div>
+      </div>
+    );
+    
+    if (!product) return (
+        <div className="pd-error-container">
+            <div className="pd-error-icon">⚠️</div>
+            <h2>Ối! Không tìm thấy sản phẩm này</h2>
+            <p>Có thể sản phẩm đã bị gỡ bỏ hoặc ID không đúng.</p>
+            <button className="pd-error-btn" onClick={() => navigate('/')}>Quay về Trang chủ</button>
+        </div>
+    );
 
     return (
-        <div className="product-detail-container" style={{ padding: '40px', display: 'flex', gap: '40px' }}>
-            <div className="detail-image" style={{ flex: 1 }}>
-                <img src={product.imageUrl} alt={product.name} style={{ width: '100%', borderRadius: '15px' }} />
-            </div>
-            
-            <div className="detail-info" style={{ flex: 1 }}>
-                <button onClick={() => navigate(-1)} style={{ marginBottom: '20px' }}>← Quay lại</button>
-                <h1>{product.name}</h1>
-                <h2 style={{ color: 'red' }}>{product.price?.toLocaleString()} VNĐ</h2>
-                <div className="description" style={{ marginTop: '20px', lineHeight: '1.6' }}>
-                    <h3>Mô tả sản phẩm:</h3>
-                    <p>{product.description || "Đang cập nhật nội dung cho sản phẩm này..."}</p>
-                </div>
-                <button className="btn-add-cart" style={{ marginTop: '30px', padding: '15px 30px', background: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-                    Thêm vào giỏ hàng
-                </button>
-            </div>
+        <div className="pd-wrapper">
+          <div className="pd-container">
+              <nav className="pd-breadcrumb">
+                  <button className="pd-back-link" onClick={() => navigate(-1)}>
+                     &#8592; Quay lại
+                  </button>
+                  <span className="breadcrumb-divider">/</span>
+                  <span className="breadcrumb-current">{product.name}</span>
+              </nav>
+
+              <div className="pd-layout">
+                  <div className="pd-media">
+                      <div className="pd-image-box">
+                         <img 
+                            src={product.imageUrl} 
+                            alt={product.name} 
+                            className="pd-main-img"
+                            onError={(e) => { e.target.src = 'https://via.placeholder.com/600x600?text=No+Image'; }}
+                         />
+                      </div>
+                  </div>
+                  
+                  <div className="pd-info">
+                      <div className="pd-header-info">
+                          <h1 className="pd-name">{product.name}</h1>
+                          <div className="pd-price-badge">
+                              <span className="pd-price-label">Giá niêm yết:</span>
+                              <span className="pd-current-price">{product.price?.toLocaleString()} ₫</span>
+                          </div>
+                      </div>
+
+                      <div className="pd-section">
+                          <h3 className="section-title">✨ Thông số nổi bật</h3>
+                          <ul className="pd-specs-list">
+                              <li><strong>Thương hiệu:</strong> {product.specs.brand}</li>
+                              <li><strong>Màn hình:</strong> {product.specs.display}</li>
+                              <li><strong>Chip xử lý:</strong> {product.specs.chip}</li>
+                              <li><strong>RAM/ROM:</strong> {product.specs.ram} / {product.specs.storage}</li>
+                              <li><strong>Pin:</strong> {product.specs.battery}</li>
+                          </ul>
+                      </div>
+
+                      <div className="pd-section">
+                          <h3 className="section-title">📝 Mô tả sản phẩm</h3>
+                          <p className="pd-desc-text">{product.description}</p>
+                      </div>
+
+                      <div className="pd-cta">
+                          <button className="btn-buy-now" onClick={handleAddToCart}>
+                              <span className="btn-label">MUA NGAY</span>
+                              <span className="btn-subtext">Giao nhanh từ 2 giờ hoặc nhận tại cửa hàng</span>
+                          </button>
+                          <button className="btn-add-to-cart-outline" onClick={handleAddToCart}>
+                              <span>Thêm giỏ hàng</span>
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          </div>
         </div>
     );
 };

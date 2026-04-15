@@ -35,6 +35,14 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
 
         {/* Các nút điều hướng */}
         <div className="navbar-actions">
+          {/* Giỏ hàng */}
+          <Link to="/cart" className="navbar-cart">
+            <span className="cart-icon">🛒</span>
+            <span className="cart-badge">0</span>
+          </Link>
+
+          <span className="navbar-divider"></span>
+
           {username ? (
             <>
               <span className="navbar-link" style={{ fontWeight: 'bold' }}>

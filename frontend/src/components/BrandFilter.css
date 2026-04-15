@@ -1,0 +1,111 @@
+.brand-filter-container {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+    padding: 0 10px;
+}
+
+.brand-filter-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    overflow-x: auto;
+    padding: 10px 5px;
+    scrollbar-width: none; /* Firefox */
+}
+
+.brand-filter-list::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+}
+
+.brand-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 80px;
+}
+
+.brand-logo-wrapper {
+    width: 70px;
+    height: 70px;
+    background-color: #ffffff;
+    border: 1px solid #e5e5e7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    transition: all 0.3s ease;
+}
+
+.brand-logo-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.brand-name-text {
+    width: 70px;
+    height: 70px;
+    background-color: #f5f5f7;
+    border: 1px solid #e5e5e7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #1d1d1f;
+    transition: all 0.3s ease;
+}
+
+.brand-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #86868b;
+    transition: all 0.3s ease;
+}
+
+/* Hover & Active States */
+.brand-item:hover .brand-logo-wrapper,
+.brand-item:hover .brand-name-text {
+    transform: translateY(-5px);
+    border-color: #0071e3;
+    box-shadow: 0 8px 16px rgba(0, 113, 227, 0.1);
+}
+
+.brand-item.active .brand-logo-wrapper,
+.brand-item.active .brand-name-text {
+    background-color: #1d1d1f;
+    border-color: #1d1d1f;
+}
+
+.brand-item.active .brand-logo-img {
+    filter: brightness(0) invert(1);
+}
+
+.brand-item.active .brand-name-text {
+    color: #ffffff;
+}
+
+.brand-item.active .brand-label {
+    color: #1d1d1f;
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .brand-filter-list {
+        justify-content: flex-start;
+        gap: 16px;
+    }
+    .brand-logo-wrapper, .brand-name-text {
+        width: 60px;
+        height: 60px;
+    }
+    .brand-label {
+        font-size: 0.8rem;
+    }
+}
