@@ -76,12 +76,12 @@ const ProductDetail = () => {
               <div className="pd-layout">
                   <div className="pd-media">
                       <div className="pd-image-box">
-                         <img 
-                            src={product.imageUrl} 
-                            alt={product.name} 
-                            className="pd-main-img"
-                            onError={(e) => { e.target.src = 'https://via.placeholder.com/600x600?text=No+Image'; }}
-                         />
+                          <img 
+                             src={product.image || product.imageUrl} 
+                             alt={product.name} 
+                             className="pd-main-img"
+                             onError={(e) => { e.target.src = 'https://via.placeholder.com/600x600?text=No+Image'; }}
+                          />
                       </div>
                   </div>
                   
@@ -97,17 +97,17 @@ const ProductDetail = () => {
                       <div className="pd-section">
                           <h3 className="section-title">✨ Thông số nổi bật</h3>
                           <ul className="pd-specs-list">
-                              <li><strong>Thương hiệu:</strong> {product.specs.brand}</li>
-                              <li><strong>Màn hình:</strong> {product.specs.display}</li>
-                              <li><strong>Chip xử lý:</strong> {product.specs.chip}</li>
-                              <li><strong>RAM/ROM:</strong> {product.specs.ram} / {product.specs.storage}</li>
-                              <li><strong>Pin:</strong> {product.specs.battery}</li>
+                              <li><strong>Thương hiệu:</strong> {product.specs?.brand || 'Apple'}</li>
+                              <li><strong>Màn hình:</strong> {product.specs?.display || 'Super Retina XDR OLED'}</li>
+                              <li><strong>Chip xử lý:</strong> {product.specs?.chip || 'A18 Pro'}</li>
+                              <li><strong>RAM/ROM:</strong> {product.specs?.ram || '8GB'} / {product.specs?.storage || '256GB'}</li>
+                              <li><strong>Pin:</strong> {product.specs?.battery || '5000 mAh'}</li>
                           </ul>
                       </div>
 
                       <div className="pd-section">
                           <h3 className="section-title">📝 Mô tả sản phẩm</h3>
-                          <p className="pd-desc-text">{product.description}</p>
+                          <p className="pd-desc-text">{product.description || 'Sản phẩm công nghệ cao cấp chính hãng.'}</p>
                       </div>
 
                       <div className="pd-cta">

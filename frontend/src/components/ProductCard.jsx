@@ -32,7 +32,7 @@ const ProductCard = ({ product }) => {
     <div className="product-card" onClick={handleViewDetail}>
       <div className="product-image-container">
         <img 
-          src={product.imageUrl} 
+          src={product.image || product.imageUrl} 
           alt={product.name} 
           className="product-image"
           loading="lazy"

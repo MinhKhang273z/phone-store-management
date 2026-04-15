@@ -8,17 +8,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
-@CrossOrigin("*") // Để Frontend gọi được vào đây
+@CrossOrigin(origins = "*") // Đảm bảo Frontend có thể gọi API mà không bị lỗi CORS
 public class ProductController {
+
     @Autowired
     private ProductService productService;
 
     @GetMapping
-    public List<Product> getAll() { return productService.getAll(); }
+    public List<Product> getAllProducts() {
+        return productService.getAllProducts();
+    }
 
     @GetMapping("/{id}")
-    public Product getById(@PathVariable Long id) { return productService.getById(id); }
-
-    @PostMapping
-    public Product create(@RequestBody Product p) { return productService.save(p); }
+    public Product getProductById(@PathVariable Long id) {
+        return productService.getProductById(id);
+    }
 }

@@ -1,10 +1,7 @@
-package com.example.backend.entity; // Chú ý: Dùng package 'entity' cho khớp với thư mục của bạn
+package com.example.backend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -15,29 +12,47 @@ public class Product {
     private Long id;
 
     private String name;
-    private String description;
-    private Double price;
-    private String imageUrl;
+    private String image; // Khớp với "image" thay vì "imageUrl"
+    private double price;
+    private String version;
+    private String color;
+
+    @ElementCollection
+    @CollectionTable(name = "product_specifications", joinColumns = @JoinColumn(name = "product_id"))
+    @Column(name = "specification")
+    private List<String> specifications;
 
     public Product() {}
 
-    public Product(Long id, String name, String description, Double price, String imageUrl) {
+    public Product(Long id, String name, String image, double price, String version, String color, List<String> specifications) {
         this.id = id;
         this.name = name;
-        this.description = description;
+        this.image = image;
         this.price = price;
-        this.imageUrl = imageUrl;
+        this.version = version;
+        this.color = color;
+        this.specifications = specifications;
     }
 
     // Getter và Setter
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-    public Double getPrice() { return price; }
-    public void setPrice(Double price) { this.price = price; }
-    public String getImageUrl() { return imageUrl; }
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    public String getImage() { return image; }
+    public void setImage(String image) { this.image = image; }
+
+    public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
+
+    public String getVersion() { return version; }
+    public void setVersion(String version) { this.version = version; }
+
+    public String getColor() { return color; }
+    public void setColor(String color) { this.color = color; }
+
+    public List<String> getSpecifications() { return specifications; }
+    public void setSpecifications(List<String> specifications) { this.specifications = specifications; }
 }
