@@ -16,9 +16,10 @@ const Login = () => {
       
       // Nếu thành công (status 200)
       if (response.data && response.data.token) {
-        // Lưu token và username vào localStorage
+        // Lưu token, username và userId vào localStorage
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("username", response.data.username);
+        localStorage.setItem("userId", response.data.userId); // Thêm dòng này
         
         alert("Đăng nhập thành công");
         

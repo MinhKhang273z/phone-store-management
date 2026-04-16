@@ -1,101 +1,135 @@
-<div align="center">
+# 📱 Phone Store Management Website
 
-  <br/>
-  <h1>📱 Hệ Thống Quản Lý Cửa Hàng Điện Thoại</h1>
-  <p>Một ứng dụng web thương mại điện tử trọn vẹn giúp dễ dàng quản lý sản phẩm, đơn hàng và trải nghiệm mua sắm của khách hàng, được xây dựng với <b>Spring Boot</b> và <b>ReactJS</b>.</p>
-
-  <p>
-    <a href="#tổng-quan"><img src="https://img.shields.io/badge/Trạng_thái-Đang_phát_triển-brightgreen?style=for-the-badge" alt="Status"/></a>
-    <a href="#công-nghệ-sử-dụng"><img src="https://img.shields.io/badge/Java-21-orange?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java"/></a>
-    <a href="#công-nghệ-sử-dụng"><img src="https://img.shields.io/badge/Spring_Boot-3.2+-success?style=for-the-badge&logo=spring-boot&logoColor=white" alt="Spring Boot"/></a>
-    <a href="#công-nghệ-sử-dụng"><img src="https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react&logoColor=white" alt="React"/></a>
-    <a href="#công-nghệ-sử-dụng"><img src="https://img.shields.io/badge/MySQL-8-blue?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL"/></a>
-  </p>
-</div>
-
-<br/>
-
-## 📖 Tổng quan
-
-**Phone Store Management** là dự án ứng dụng web toàn diện (Full-stack) được thiết kế để quản lý các hoạt động bán lẻ của một cửa hàng điện thoại di động trực tuyến. 
-
-Hệ thống cung cấp trải nghiệm mượt mà cho **Khách hàng** (từ xem sản phẩm đến đặt mua) và các công cụ mạnh mẽ dành cho **Quản trị viên** (quản lý kho hàng, theo dõi đơn hàng).
+A modern, high-performance Full-stack E-commerce solution for mobile devices, built with **Spring Boot** and **React**.
 
 ---
 
-## 🛠️ Công nghệ sử dụng
-
-Dự án áp dụng mô hình Frontend/Backend tách biệt, sử dụng công nghệ tiên tiến nhất:
-
-| Lớp (Layer) | Cấu phần | Công nghệ / Thư viện |
-| :--- | :--- | :--- |
-| **Frontend** | Giao diện | ReactJS 19, React Router DOM, Vite |
-| **Backend** | API Server | Java 21, Spring Boot, Spring Web MVC, Maven |
-| **Bảo mật** | Xác thực & Quyền | Spring Security |
-| **Cơ sở dữ liệu** | Lưu trữ | MySQL 8, Spring Data JPA |
-| **DevOps** | Triển khai | Docker (Sẵn sàng container hoá) |
+## 📋 Table of Contents
+- [🚀 Features](#-features)
+- [🛠️ Tech Stack](#️-tech-stack)
+- [📦 Installation](#-installation)
+- [⚙️ Configuration](#️-configuration)
+- [📁 Project Structure](#-project-structure)
+- [📸 Screenshots](#-screenshots)
+- [👤 Author](#-author)
 
 ---
 
-## 📁 Kiến trúc thư mục
+## 🚀 Features
+
+The system provides a seamless experience for both customers and administrators:
+
+-   🔐 **Authentication**: Secure Register and Login functionality.
+-   📱 **Product Catalog**: Browse a wide range of mobile devices.
+-   🔍 **Detailed View**: Access full specifications, images, and pricing for each product.
+-   🛒 **Smart Cart**: 
+    -   Add products to the cart.
+    -   Adjust quantities (automatic merging of identical items).
+    -   Remove items from the cart.
+-   📦 **Ordering**: Simple checkout process with total price calculation and order history.
+-   🛠️ **Admin Management**: Full CRUD operations for products (Create, Read, Update, Delete).
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **Framework**: React 19 (Vite)
+- **Styling**: Vanilla CSS3 (Modern Flexbox/Grid)
+- **State Management**: React Context API
+- **API Client**: Axios
+
+### Backend
+- **Framework**: Spring Boot 3.x
+- **Language**: Java 21
+- **Database**: MySQL 8.0
+- **ORM**: Spring Data JPA
+
+---
+
+## 📦 Installation
+
+Follow these steps to set up the project locally.
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/MinhKhang273z/phone-store-management.git
+cd phone-store-management
+```
+
+### 2. Setup Database
+- Create a MySQL database named `phone_store`.
+- Import the initialization script:
+```bash
+mysql -u root -p phone_store < database/init.sql
+```
+
+### 3. Run Backend (Spring Boot)
+```bash
+cd backend
+./mvnw spring-boot:run
+```
+
+### 4. Run Frontend (React)
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+---
+
+## ⚙️ Configuration
+
+### Database Connection
+Update the `backend/src/main/resources/application.properties` file with your credentials:
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/phone_store
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+spring.jpa.hibernate.ddl-auto=update
+```
+
+### Docker Support
+The project includes a `docker-compose.yml` file for quick environment setup:
+```bash
+docker-compose up -d
+```
+
+---
+
+## 📁 Project Structure
 
 ```text
 phone-store-management/
-├── backend/            # Mã nguồn API Server Spring Boot (Java)
-├── frontend/           # Mã nguồn Web Client React (Vite)
-├── database/           # Script cấu trúc CSDL khởi tạo (init.sql)
-└── docker/             # Cấu hình cài đặt môi trường bằng Docker
+├── backend/            # Spring Boot Application
+│   ├── src/main/java   # Java Source Code
+│   └── src/resources   # Configuration & Static Resources
+├── frontend/           # React Application
+│   ├── src/components  # Reusable UI Components
+│   ├── src/pages       # Page Views
+│   └── src/services    # API Service Layers
+├── database/           # SQL initialization scripts
+└── docker/             # Docker configuration files
 ```
 
 ---
 
-## 🚀 Hướng dẫn chạy dự án
+## 📸 Screenshots
 
-### 1. Yêu cầu cấu hình
-* [Java Development Kit (JDK) 21+](https://www.oracle.com/java/technologies/downloads/)
-* [Node.js (v18+) & npm (LTS)](https://nodejs.org/en/)
-* [MySQL database](https://dev.mysql.com/downloads/mysql/)
-* *(Tuỳ chọn)* Docker & Docker Compose
-
-### 2. Thiết lập Cơ sở dữ liệu (Database)
-Khởi tạo CSDL với mã nguồn SQL được đính kèm:
-```bash
-# Đăng nhập vào MySQL:
-mysql -u root -p
-
-# Mở script init.sql tạo bảng (trỏ đúng đường dẫn lưu trữ source code):
-source ./database/init.sql
-```
-
-### 3. Chạy Server (Backend)
-Tiến hành nạp thư viện và khởi chạy máy chủ cung cấp API:
-```bash
-cd backend
-# Sử dụng Maven để run ứng dụng
-./mvnw spring-boot:run
-```
-> **Lưu ý**: Đừng quên cập nhật thông tin cấu hình username/password cho mySQL trong tệp `application.properties` (hoặc `application.yml`) của Spring Boot nhé. Server mặc định sẽ lắng nghe ở `http://localhost:8080`.
-
-### 4. Chạy Client (Frontend)
-Tiến hành tải modules và chạy giao diện tương tác:
-```bash
-cd frontend
-# Cài đặt node_modules
-npm install
-# Chạy máy chủ phát triển (hot-reload)
-npm run dev
-```
-> Truy cập ứng dụng trình duyệt tại địa chỉ được log trên terminal (thường là `http://localhost:5173`).
+<div align="center">
+  <img src="https://via.placeholder.com/800x400?text=Product+Catalog+Dashboard" alt="Dashboard" style="border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" />
+  <img src="https://via.placeholder.com/800x400?text=Premium+Cart+Experience" alt="Cart" style="border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" />
+</div>
 
 ---
 
-## 🤝 Đóng góp (Contributing)
+## 👤 Author
 
-Dự án đang trong quá trình phát triển, chúng tôi rất hoan nghênh những ý kiến và đóng góp từ thiết kế giao diện cho tới tối ưu code backend.
-1. `Fork` kho lưu trữ (repository)
-2. Tạo First Feature (`git checkout -b feature/NewFeature`)
-3. Commit cập nhật (`git commit -m 'Thêm một chức năng gì đó xịn xò'`)
-4. Push lên nhánh (`git push origin feature/NewFeature`)
-5. Mở `Pull Request`
+- **Minh Khang** - *Full Stack Developer* - [MinhKhang273z](https://github.com/MinhKhang273z)
 
-🌟 ***Hãy tặng dự án một ngôi sao (Star) nếu bạn thấy nó hữu ích!*** 🌟
+---
+
+<div align="center">
+  <p>If you find this project helpful, please give it a ⭐!</p>
+</div>
