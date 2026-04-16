@@ -57,7 +57,8 @@ export const CartProvider = ({ children }) => {
                     userId: parseInt(userId),
                     productName: product.name,
                     price: product.price,
-                    quantity: 1
+                    quantity: 1,
+                    imageUrl: product.image || product.imageUrl
                 };
                 await addToCartApi(itemData);
                 // Refresh cart from server to get accurate state
@@ -78,7 +79,11 @@ export const CartProvider = ({ children }) => {
                         item.name === product.name ? { ...item, quantity: item.quantity + 1 } : item
                     );
                 }
-                return [...prevItems, { ...product, quantity: 1 }];
+                return [...prevItems, { 
+                    ...product, 
+                    quantity: 1,
+                    imageUrl: product.image || product.imageUrl
+                }];
             });
         }
     };

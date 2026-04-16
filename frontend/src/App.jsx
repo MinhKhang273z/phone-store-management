@@ -28,16 +28,7 @@ function App() {
             </Routes>
           </main>
 
-          <footer style={{ 
-            position: 'fixed', 
-            bottom: '10px', 
-            left: '10px', 
-            fontSize: '14px', 
-            color: '#555', 
-            zIndex: 1000 
-          }}>
-            <p style={{ margin: 0 }}>© 2026 Phone Store Management </p>
-          </footer>
+          
         </div>
       </CartProvider>
     </Router>

@@ -62,8 +62,8 @@ const Cart = () => {
                             <div key={item.id} className="cart-item-card">
                                 <div className="cart-item-image">
                                     <img 
-                                        src={item.image || `https://via.placeholder.com/150?text=${item.name}`} 
-                                        alt={item.name} 
+                                        src={item.imageUrl || `https://via.placeholder.com/150?text=${item.name}`} 
+                                        alt={item.name || item.productName} 
                                         onError={(e) => { e.target.src = 'https://via.placeholder.com/100?text=No+Image'; }}
                                     />
                                 </div>

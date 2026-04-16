@@ -26,8 +26,10 @@ public class CartService {
         if (existingItem.isPresent()) {
             CartItem cartItem = existingItem.get();
             cartItem.setQuantity(cartItem.getQuantity() + item.getQuantity());
+            // Preserve existing imageUrl
             return cartItemRepository.save(cartItem);
         } else {
+            // New items will save imageUrl from 'item'
             return cartItemRepository.save(item);
         }
     }

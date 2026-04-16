@@ -1,37 +1,38 @@
-# 📱 Phone Store Management Website
+# 📱 Hệ Thống Quản Lý Cửa Hàng Điện Thoại
 
-A modern, high-performance Full-stack E-commerce solution for mobile devices, built with **Spring Boot** and **React**.
-
----
-
-## 📋 Table of Contents
-- [🚀 Features](#-features)
-- [🛠️ Tech Stack](#️-tech-stack)
-- [📦 Installation](#-installation)
-- [⚙️ Configuration](#️-configuration)
-- [📁 Project Structure](#-project-structure)
-- [📸 Screenshots](#-screenshots)
-- [👤 Author](#-author)
+Một giải pháp thương mại điện tử Full-stack hiện đại dành cho thiết bị di động, được xây dựng bằng **Spring Boot** và **React**. Hệ thống mang lại trải nghiệm mượt mà, hiệu năng cao và giao diện người dùng tinh tế.
 
 ---
 
-## 🚀 Features
-
-The system provides a seamless experience for both customers and administrators:
-
--   🔐 **Authentication**: Secure Register and Login functionality.
--   📱 **Product Catalog**: Browse a wide range of mobile devices.
--   🔍 **Detailed View**: Access full specifications, images, and pricing for each product.
--   🛒 **Smart Cart**: 
-    -   Add products to the cart.
-    -   Adjust quantities (automatic merging of identical items).
-    -   Remove items from the cart.
--   📦 **Ordering**: Simple checkout process with total price calculation and order history.
--   🛠️ **Admin Management**: Full CRUD operations for products (Create, Read, Update, Delete).
+## 📋 Mục lục
+- [🚀 Tính năng chính](#-tính-năng-chính)
+- [🛠️ Công nghệ sử dụng](#️-công-nghệ-sử-dụng)
+- [📦 Hướng dẫn cài đặt](#-hướng-dẫn-cài-đặt)
+- [⚙️ Cấu hình hệ thống](#️-cấu-hình-hệ-thống)
+- [📁 Cấu trúc dự án](#-cấu-trúc-dự-án)
+- [📸 Hình ảnh giao diện](#-hình-ảnh-giao-diện)
+- [👤 Tác giả](#-tác-giả)
 
 ---
 
-## 🛠️ Tech Stack
+## 🚀 Tính năng chính
+
+Hệ thống cung cấp đầy đủ các tính năng cho cả khách hàng và quản trị viên:
+
+- 🔐 **Xác thực người dùng**: Đăng ký và Đăng nhập bảo mật.
+- 📱 **Danh mục sản phẩm**: Duyệt danh sách các thiết bị di động mới nhất.
+- 🔍 **Chi tiết sản phẩm**: Xem thông số kỹ thuật đầy đủ, hình ảnh và giá cả.
+- 🛒 **Giỏ hàng thông minh**: 
+    - Thêm sản phẩm nhanh chóng.
+    - Tự động gộp các sản phẩm cùng loại và cập nhật số lượng.
+    - Hiển thị hình ảnh sản phẩm trực quan ngay trong giỏ hàng.
+    - Xóa sản phẩm linh hoạt.
+- 📦 **Đặt hàng**: Quy trình thanh toán đơn giản, tự động tính tổng tiền.
+- 🛠️ **Quản trị hệ thống**: Quản lý sản phẩm (Thêm, Xóa, Sửa, Xem chi tiết).
+
+---
+
+## 🛠️ Công nghệ sử dụng
 
 ### Frontend
 - **Framework**: React 19 (Vite)
@@ -47,30 +48,30 @@ The system provides a seamless experience for both customers and administrators:
 
 ---
 
-## 📦 Installation
+## 📦 Hướng dẫn cài đặt
 
-Follow these steps to set up the project locally.
+Làm theo các bước sau để chạy dự án trên máy cục bộ của bạn.
 
-### 1. Clone the repository
+### 1. Clone repository
 ```bash
 git clone https://github.com/MinhKhang273z/phone-store-management.git
 cd phone-store-management
 ```
 
-### 2. Setup Database
-- Create a MySQL database named `phone_store`.
-- Import the initialization script:
+### 2. Thiết lập cơ sở dữ liệu
+- Tạo một database trong MySQL có tên là `phone_store`.
+- Import script khởi tạo (nếu có):
 ```bash
 mysql -u root -p phone_store < database/init.sql
 ```
 
-### 3. Run Backend (Spring Boot)
+### 3. Chạy Backend (Spring Boot)
 ```bash
 cd backend
 ./mvnw spring-boot:run
 ```
 
-### 4. Run Frontend (React)
+### 4. Chạy Frontend (React)
 ```bash
 cd frontend
 npm install
@@ -79,57 +80,60 @@ npm run dev
 
 ---
 
-## ⚙️ Configuration
+## ⚙️ Cấu hình hệ thống
 
-### Database Connection
-Update the `backend/src/main/resources/application.properties` file with your credentials:
+### Kết nối cơ sở dữ liệu
+Cập nhật file `backend/src/main/resources/application.properties` với thông tin của bạn:
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/phone_store
-spring.datasource.username=your_username
-spring.datasource.password=your_password
+spring.datasource.url=jdbc:mysql://localhost:3307/phone_store
+spring.datasource.username=root
+spring.datasource.password=123456
 spring.jpa.hibernate.ddl-auto=update
 ```
 
-### Docker Support
-The project includes a `docker-compose.yml` file for quick environment setup:
+### Hỗ trợ Docker
+Dự án có sẵn file `docker-compose.yml` để thiết lập môi trường nhanh chóng:
 ```bash
 docker-compose up -d
 ```
 
 ---
 
-## 📁 Project Structure
+## 📁 Cấu trúc dự án
 
 ```text
 phone-store-management/
-├── backend/            # Spring Boot Application
-│   ├── src/main/java   # Java Source Code
-│   └── src/resources   # Configuration & Static Resources
-├── frontend/           # React Application
-│   ├── src/components  # Reusable UI Components
-│   ├── src/pages       # Page Views
-│   └── src/services    # API Service Layers
-├── database/           # SQL initialization scripts
-└── docker/             # Docker configuration files
+├── backend/            # Ứng dụng Spring Boot
+│   ├── src/main/java   # Mã nguồn Java
+│   └── src/resources   # Cấu hình & Tài nguyên tĩnh
+├── frontend/           # Ứng dụng React
+│   ├── src/components  # Các thành phần giao diện tái sử dụng
+│   ├── src/pages       # Các trang chính của ứng dụng
+│   └── src/services    # Lớp dịch vụ gọi API
+├── database/           # Các script khởi tạo SQL
+└── docker/             # File cấu hình Docker
 ```
 
 ---
 
-## 📸 Screenshots
+## 📸 Hình ảnh giao diện
 
 <div align="center">
-  <img src="https://via.placeholder.com/800x400?text=Product+Catalog+Dashboard" alt="Dashboard" style="border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" />
-  <img src="https://via.placeholder.com/800x400?text=Premium+Cart+Experience" alt="Cart" style="border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" />
+  <p><b>Trang chủ - Danh mục sản phẩm</b></p>
+  <img src="frontend/src/assets/interface/homepage.png" alt="Trang chủ" style="border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" />
+  
+  <p><b>Giỏ hàng hiện đại</b></p>
+  <img src="frontend/src/assets/interface/cart.png" alt="Giỏ hàng" style="border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" />
 </div>
 
 ---
 
-## 👤 Author
+## 👤 Tác giả
 
 - **Minh Khang** - *Full Stack Developer* - [MinhKhang273z](https://github.com/MinhKhang273z)
 
 ---
 
 <div align="center">
-  <p>If you find this project helpful, please give it a ⭐!</p>
+  <p>Nếu bạn thấy dự án này hữu ích, hãy tặng cho mình một ⭐ nhé!</p>
 </div>

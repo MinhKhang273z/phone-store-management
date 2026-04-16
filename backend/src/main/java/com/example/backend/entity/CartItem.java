@@ -14,15 +14,17 @@ public class CartItem {
     private String productName;
     private double price;
     private int quantity;
+    private String imageUrl;
 
     public CartItem() {}
 
-    public CartItem(Long id, Long userId, String productName, double price, int quantity) {
+    public CartItem(Long id, Long userId, String productName, double price, int quantity, String imageUrl) {
         this.id = id;
         this.userId = userId;
         this.productName = productName;
         this.price = price;
         this.quantity = quantity;
+        this.imageUrl = imageUrl;
     }
 
     // Getters and Setters
@@ -40,4 +42,7 @@ public class CartItem {
 
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
+
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 }
