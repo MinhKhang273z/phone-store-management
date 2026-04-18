@@ -18,6 +18,7 @@ public class CartController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<List<CartItem>> getCart(@PathVariable Long userId) {
+        System.out.println("API Called: GET /api/cart/" + userId);
         return ResponseEntity.ok(cartService.getCartByUserId(userId));
     }
 

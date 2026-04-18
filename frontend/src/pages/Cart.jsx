@@ -21,12 +21,15 @@ const Cart = () => {
         if (confirm("Xác nhận đặt hàng?")) {
             setLoading(true);
             try {
-                await createOrderApi(userId);
+                // Đảm bảo userId là kiểu số
+                await createOrderApi(Number(userId));
                 alert("Đặt hàng thành công! Cảm ơn bạn đã mua sắm.");
                 clearCart();
                 navigate('/');
             } catch (error) {
-                alert("Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại.");
+                // Hiển thị thông báo lỗi cụ thể từ server nếu có
+                const errorMsg = error.response?.data?.message || "Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại.";
+                alert(errorMsg);
                 console.error(error);
             } finally {
                 setLoading(false);

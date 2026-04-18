@@ -23,9 +23,12 @@ const Login = () => {
         
         alert("Đăng nhập thành công");
         
-        // Chuyển hướng về trang chủ
-        // Sử dụng window.location.href để load lại state thẻ Navbar
-        window.location.href = '/';
+        // Chuyển hướng tự động dựa trên role
+        if (response.data.role === "ADMIN") {
+          window.location.href = '/admin'; // Admin vào trang quản trị
+        } else {
+          window.location.href = '/'; // User vào trang chủ
+        }
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {

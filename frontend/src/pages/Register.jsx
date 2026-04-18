@@ -12,7 +12,7 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      // Gọi API đăng ký
+      // Gọi API đăng ký (Đã xóa bỏ Họ tên đầy đủ)
       await register(username, email, password);
       
       alert("Đăng ký thành công! Hãy đăng nhập.");
@@ -20,7 +20,7 @@ const Register = () => {
       navigate('/login');
     } catch (error) {
        if (error.response && error.response.data) {
-         alert("Lỗi đăng ký: " + error.response.data);
+         alert("Lỗi đăng ký: " + (error.response.data.message || error.response.data));
        } else {
          alert("Đăng ký thất bại!");
        }

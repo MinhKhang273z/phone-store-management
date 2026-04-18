@@ -3,21 +3,36 @@ import axios from 'axios';
 // 1. Khai báo URL gốc của API (Backend đang chạy ở cổng 8081)
 const API_BASE_URL = 'http://localhost:8081/api';
 
+// Helper để log
+const logRequest = (name, data) => {
+    console.log(`[API Request] Calling ${name}...`, data || "");
+};
+const logResponse = (name, data) => {
+    console.log(`[API Response] Success from ${name}:`, data);
+};
+
 // --- PHẦN AUTH ---
 export const login = async (username, password) => {
-  return await axios.post(`${API_BASE_URL}/auth/login`, { username, password });
+  logRequest("login", { username });
+  const res = await axios.post(`${API_BASE_URL}/auth/login`, { username, password });
+  logResponse("login", res.data);
+  return res;
 };
 
 export const register = async (username, email, password) => {
-  return await axios.post(`${API_BASE_URL}/auth/register`, { username, email, password });
+  logRequest("register", { username, email });
+  const res = await axios.post(`${API_BASE_URL}/auth/register`, { username, email, password });
+  logResponse("register", res.data);
+  return res;
 };
 
 // --- PHẦN PRODUCT ---
 
-// 2. Hàm lấy tất cả sản phẩm
 export const getAllProducts = async () => {
   try {
+    logRequest("getAllProducts");
     const response = await axios.get(`${API_BASE_URL}/products`);
+    logResponse("getAllProducts", response.data);
     return response.data;
   } catch (error) {
     console.error("Lỗi lấy danh sách sản phẩm:", error);
@@ -25,32 +40,34 @@ export const getAllProducts = async () => {
   }
 };
 
-// 3. Hàm lấy chi tiết 1 sản phẩm
-export const getProductById = async (id) => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/products/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error("Lỗi lấy chi tiết sản phẩm:", error);
-    throw error;
-  }
+export const createProduct = async (productData) => {
+  logRequest("createProduct", productData);
+  const res = await axios.post(`${API_BASE_URL}/products`, productData);
+  logResponse("createProduct", res.data);
+  return res;
 };
 
-// 4. Các hàm CRUD khác
-export const createProduct = async (productData) => {
-  return await axios.post(`${API_BASE_URL}/products`, productData);
+export const updateProduct = async (id, productData) => {
+  logRequest("updateProduct", { id, productData });
+  const res = await axios.put(`${API_BASE_URL}/products/${id}`, productData);
+  logResponse("updateProduct", res.data);
+  return res;
 };
 
 export const deleteProduct = async (id) => {
-  return await axios.delete(`${API_BASE_URL}/products/${id}`);
+  logRequest("deleteProduct", id);
+  const res = await axios.delete(`${API_BASE_URL}/products/${id}`);
+  logResponse("deleteProduct", "Deleted");
+  return res;
 };
 
-// --- PHẦN CART & ORDER (Mới thêm) ---
+// --- PHẦN CART & ORDER ---
 
-// Lấy danh sách giỏ hàng của user
 export const getCart = async (userId) => {
   try {
+    logRequest("getCart", userId);
     const response = await axios.get(`${API_BASE_URL}/cart/${userId}`);
+    logResponse("getCart", response.data);
     return response.data;
   } catch (error) {
     console.error("Lỗi lấy giỏ hàng:", error);
@@ -58,10 +75,11 @@ export const getCart = async (userId) => {
   }
 };
 
-// Thêm sản phẩm vào giỏ
 export const addToCartApi = async (cartData) => {
   try {
+    logRequest("addToCartApi", cartData);
     const response = await axios.post(`${API_BASE_URL}/cart`, cartData);
+    logResponse("addToCartApi", response.data);
     return response.data;
   } catch (error) {
     console.error("Lỗi thêm vào giỏ hàng:", error);
@@ -69,23 +87,51 @@ export const addToCartApi = async (cartData) => {
   }
 };
 
-// Xóa sản phẩm khỏi giỏ
 export const deleteCartItemApi = async (id) => {
   try {
+    logRequest("deleteCartItemApi", id);
     await axios.delete(`${API_BASE_URL}/cart/${id}`);
+    logResponse("deleteCartItemApi", "Deleted");
   } catch (error) {
     console.error("Lỗi xóa sản phẩm khỏi giỏ:", error);
     throw error;
   }
 };
 
-// Tạo đơn hàng từ giỏ hàng
 export const createOrderApi = async (userId) => {
   try {
+    logRequest("createOrderApi", userId);
     const response = await axios.post(`${API_BASE_URL}/order`, { userId });
+    logResponse("createOrderApi", response.data);
     return response.data;
   } catch (error) {
     console.error("Lỗi tạo đơn hàng:", error);
     throw error;
   }
+};
+
+// --- PHẦN ADMIN ORDER ---
+
+export const getAllOrdersApi = async () => {
+    try {
+        logRequest("getAllOrdersApi");
+        const response = await axios.get(`${API_BASE_URL}/order`);
+        logResponse("getAllOrdersApi", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Lỗi lấy danh sách đơn hàng:", error);
+        throw error;
+    }
+};
+
+export const updateOrderStatusApi = async (id, status) => {
+    try {
+        logRequest("updateOrderStatusApi", { id, status });
+        const response = await axios.put(`${API_BASE_URL}/order/${id}/status`, { status });
+        logResponse("updateOrderStatusApi", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Lỗi cập nhật trạng thái đơn hàng:", error);
+        throw error;
+    }
 };

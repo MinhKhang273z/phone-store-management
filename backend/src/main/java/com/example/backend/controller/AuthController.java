@@ -22,6 +22,7 @@ public class AuthController {
     // Login API
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> request) {
+        System.out.println("API Called: /api/auth/login");
         String username = request.get("username");
         String password = request.get("password");
 
@@ -42,6 +43,7 @@ public class AuthController {
     // Register API
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Map<String, String> request) {
+        System.out.println("API Called: /api/auth/register");
         String username = request.get("username");
         String email = request.get("email");
         String password = request.get("password");

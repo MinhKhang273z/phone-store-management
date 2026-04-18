@@ -3,12 +3,14 @@ package com.example.backend.controller;
 import com.example.backend.entity.Product;
 import com.example.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
-@CrossOrigin(origins = "*") // Đảm bảo Frontend có thể gọi API mà không bị lỗi CORS
+@CrossOrigin(origins = "*")
 public class ProductController {
 
     @Autowired
@@ -16,11 +18,44 @@ public class ProductController {
 
     @GetMapping
     public List<Product> getAllProducts() {
+        System.out.println("API Called: GET /api/products");
         return productService.getAllProducts();
     }
 
     @GetMapping("/{id}")
     public Product getProductById(@PathVariable Long id) {
         return productService.getProductById(id);
+    }
+
+    @PostMapping
+    public Product createProduct(@RequestBody Product product) {
+        System.out.println("API Called: POST /api/products");
+        return productService.saveProduct(product);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {
+        Product product = productService.getProductById(id);
+        if (product == null) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        product.setName(productDetails.getName());
+        product.setImage(productDetails.getImage());
+        product.setPrice(productDetails.getPrice());
+        product.setVersion(productDetails.getVersion());
+        product.setColor(productDetails.getColor());
+        product.setDescription(productDetails.getDescription()); // Cập nhật mô tả
+        product.setSpecifications(productDetails.getSpecifications());
+        
+        Product updatedProduct = productService.saveProduct(product);
+        return ResponseEntity.ok(updatedProduct);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        System.out.println("API Called: DELETE /api/products/" + id);
+        productService.deleteProduct(id);
+        return ResponseEntity.ok().build();
     }
 }

@@ -12,10 +12,13 @@ public class Product {
     private Long id;
 
     private String name;
-    private String image; // Khớp với "image" thay vì "imageUrl"
+    private String image; 
     private double price;
     private String version;
     private String color;
+    
+    @Column(columnDefinition = "TEXT")
+    private String description; // Mới thêm
 
     @ElementCollection
     @CollectionTable(name = "product_specifications", joinColumns = @JoinColumn(name = "product_id"))
@@ -24,7 +27,7 @@ public class Product {
 
     public Product() {}
 
-    public Product(Long id, String name, String image, double price, String version, String color, List<String> specifications) {
+    public Product(Long id, String name, String image, double price, String version, String color, List<String> specifications, String description) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -32,6 +35,7 @@ public class Product {
         this.version = version;
         this.color = color;
         this.specifications = specifications;
+        this.description = description;
     }
 
     // Getter và Setter
@@ -52,6 +56,9 @@ public class Product {
 
     public String getColor() { return color; }
     public void setColor(String color) { this.color = color; }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
     public List<String> getSpecifications() { return specifications; }
     public void setSpecifications(List<String> specifications) { this.specifications = specifications; }
