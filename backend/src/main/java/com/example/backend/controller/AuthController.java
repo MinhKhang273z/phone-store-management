@@ -31,7 +31,8 @@ public class AuthController {
             Map<String, String> response = new HashMap<>();
             response.put("token", "fake-jwt-token-for-" + username);
             response.put("username", username);
-            response.put("userId", String.valueOf(user.get().getId())); // Trả về userId
+            response.put("userId", String.valueOf(user.get().getId())); 
+            response.put("role", user.get().getRole()); // Trả về role
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tài khoản hoặc mật khẩu không chính xác!");

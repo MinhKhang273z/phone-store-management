@@ -8,10 +8,13 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
   const navigate = useNavigate();
   // Kiểm tra user có trong localStorage hay không
   const username = localStorage.getItem('username');
+  const role = localStorage.getItem('role');
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('role');
     // Refresh the page or navigate to login
     window.location.href = '/login';
   };
@@ -47,6 +50,14 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
 
           {username ? (
             <>
+              {role === 'ADMIN' && (
+                <>
+                  <Link to="/admin" className="navbar-link" style={{ color: '#ff4d4d', fontWeight: 'bold' }}>
+                    Admin
+                  </Link>
+                  <span className="navbar-divider">|</span>
+                </>
+              )}
               <span className="navbar-link" style={{ fontWeight: 'bold' }}>
                 👤 {username}
               </span>
@@ -54,7 +65,7 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
               <button 
                  onClick={handleLogout} 
                  className="navbar-link" 
-                 style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', outline: 'none' }}>
+                 style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', outline: 'none', color: '#333' }}>
                 Logout
               </button>
             </>
