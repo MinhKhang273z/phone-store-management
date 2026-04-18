@@ -26,6 +26,22 @@ export const register = async (username, email, password) => {
   return res;
 };
 
+// --- PHẦN USERS ---
+
+export const getAllUsersApi = async () => {
+    logRequest("getAllUsersApi");
+    const res = await axios.get(`${API_BASE_URL}/users`);
+    logResponse("getAllUsersApi", res.data);
+    return res.data;
+};
+
+export const deleteUserApi = async (id) => {
+    logRequest("deleteUserApi", id);
+    const res = await axios.delete(`${API_BASE_URL}/users/${id}`);
+    logResponse("deleteUserApi", "Deleted");
+    return res;
+};
+
 // --- PHẦN PRODUCT ---
 
 export const getAllProducts = async () => {
@@ -110,7 +126,7 @@ export const createOrderApi = async (userId) => {
   }
 };
 
-// --- PHẦN ADMIN ORDER ---
+// --- PHẦN ADMIN ORDER & STATS ---
 
 export const getAllOrdersApi = async () => {
     try {
@@ -134,4 +150,11 @@ export const updateOrderStatusApi = async (id, status) => {
         console.error("Lỗi cập nhật trạng thái đơn hàng:", error);
         throw error;
     }
+};
+
+export const getAdminStatsApi = async () => {
+    logRequest("getAdminStatsApi");
+    const res = await axios.get(`${API_BASE_URL}/admin/stats`);
+    logResponse("getAdminStatsApi", res.data);
+    return res.data;
 };

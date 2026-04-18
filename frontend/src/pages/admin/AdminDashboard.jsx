@@ -2,31 +2,34 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
     getAllProducts, createProduct, updateProduct, deleteProduct, 
-    getAllOrdersApi, updateOrderStatusApi 
+    getAllOrdersApi, updateOrderStatusApi,
+    getAllUsersApi, deleteUserApi
 } from '../../services/api';
+import AdminStats from '../../components/AdminStats';
 
 /**
- * AdminDashboard - Quản lý hệ thống tích hợp (Sản phẩm & Đơn hàng)
+ * AdminDashboard - Hệ thống quản lý Tổng hợp (Thống kê, Sản phẩm, Đơn hàng, Người dùng)
  */
 const AdminDashboard = () => {
     // 1. States chung
-    const [activeTab, setActiveTab] = useState("products"); // "products" hoặc "orders"
+    const [activeTab, setActiveTab] = useState("products"); // "products", "orders", "users"
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const username = localStorage.getItem("username");
     const role = localStorage.getItem("role");
 
-    // 2. States cho Sản phẩm
+    // 2. States dữ liệu
     const [products, setProducts] = useState([]);
+    const [orders, setOrders] = useState([]);
+    const [users, setUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+
+    // 3. States Modals/Forms
     const [isProductModalOpen, setIsProductModalOpen] = useState(false);
     const [currentProduct, setCurrentProduct] = useState({ name: "", price: "", image: "", description: "" });
     const [isEdit, setIsEdit] = useState(false);
 
-    // 3. States cho Đơn hàng
-    const [orders, setOrders] = useState([]);
-
-    // 4. Kiểm tra quyền Admin
+    // 4. Kiểm tra quyền Admin & Tải dữ liệu
     useEffect(() => {
         if (role !== "ADMIN") {
             alert("Bạn không có quyền truy cập trang này!");
@@ -42,9 +45,12 @@ const AdminDashboard = () => {
             if (activeTab === "products") {
                 const data = await getAllProducts();
                 setProducts(data);
-            } else {
+            } else if (activeTab === "orders") {
                 const data = await getAllOrdersApi();
                 setOrders(data);
+            } else if (activeTab === "users") {
+                const data = await getAllUsersApi();
+                setUsers(data);
             }
         } catch (error) {
             console.error("Lỗi khi tải dữ liệu:", error);
@@ -80,6 +86,14 @@ const AdminDashboard = () => {
         }
     };
 
+    // --- LOGIC NGƯỜI DÙNG ---
+    const handleDeleteUser = async (id, name) => {
+        if (window.confirm(`Xóa tài khoản "${name}"?`)) {
+            await deleteUserApi(id);
+            loadData();
+        }
+    };
+
     const handleLogout = () => {
         localStorage.clear();
         window.location.href = "/login";
@@ -105,6 +119,12 @@ const AdminDashboard = () => {
                     >
                         📜 Quản lý đơn hàng
                     </button>
+                    <button 
+                        onClick={() => setActiveTab("users")}
+                        style={{ padding: '15px 20px', textAlign: 'left', backgroundColor: activeTab === "users" ? '#34495e' : 'transparent', color: '#fff', border: 'none', cursor: 'pointer', fontSize: '1rem', borderLeft: activeTab === "users" ? '4px solid #3498db' : '4px solid transparent' }}
+                    >
+                        👥 Quản lý người dùng
+                    </button>
                 </div>
                 <div style={{ marginTop: 'auto', padding: '20px', borderTop: '1px solid #3e4f5f', display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <span style={{ fontSize: '1.2rem' }}>👤</span>
@@ -117,7 +137,7 @@ const AdminDashboard = () => {
                 {/* TOP BAR */}
                 <div style={{ height: '70px', backgroundColor: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 30px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
                     <h3 style={{ margin: 0, color: '#333' }}>
-                        {activeTab === "products" ? "Danh sách sản phẩm" : "Danh sách đơn hàng"}
+                        {activeTab === "products" ? "Danh sách sản phẩm" : activeTab === "orders" ? "Danh sách đơn hàng" : "Danh sách người dùng"}
                     </h3>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                         <button onClick={() => navigate("/")} style={{ padding: '8px 15px', backgroundColor: '#3498db', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}>🏠 Trang chủ</button>
@@ -127,12 +147,15 @@ const AdminDashboard = () => {
 
                 {/* CONTENT AREA */}
                 <div style={{ padding: '30px', overflowY: 'auto' }}>
+                    
+                    {/* THỐNG KÊ TỔNG QUAN (Luôn hiện ở đầu) */}
+                    <AdminStats />
+
                     {loading ? (
-                        <div>Đang tải dữ liệu...</div>
+                        <div style={{ padding: '20px', textAlign: 'center' }}>Đang tải dữ liệu...</div>
                     ) : (
                         <>
-                            {activeTab === "products" ? (
-                                /* VIEW SẢN PHẨM */
+                            {activeTab === "products" && (
                                 <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
                                         <input 
@@ -173,8 +196,9 @@ const AdminDashboard = () => {
                                         </tbody>
                                     </table>
                                 </div>
-                            ) : (
-                                /* VIEW ĐƠN HÀNG */
+                            )}
+
+                            {activeTab === "orders" && (
                                 <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
                                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                                         <thead>
@@ -217,12 +241,47 @@ const AdminDashboard = () => {
                                     </table>
                                 </div>
                             )}
+
+                            {activeTab === "users" && (
+                                <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                        <thead>
+                                            <tr style={{ backgroundColor: '#f8f9fa', textAlign: 'left', borderBottom: '2px solid #eee' }}>
+                                                <th style={{ padding: '12px' }}>ID</th>
+                                                <th style={{ padding: '12px' }}>Tên đăng nhập</th>
+                                                <th style={{ padding: '12px' }}>Email</th>
+                                                <th style={{ padding: '12px' }}>Vai trò</th>
+                                                <th style={{ padding: '12px', textAlign: 'center' }}>Thao tác</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {users.map(u => (
+                                                <tr key={u.id} style={{ borderBottom: '1px solid #f0f0f0' }}>
+                                                    <td style={{ padding: '12px' }}>#{u.id}</td>
+                                                    <td style={{ padding: '12px', fontWeight: '500' }}>{u.username}</td>
+                                                    <td style={{ padding: '12px' }}>{u.email}</td>
+                                                    <td style={{ padding: '12px' }}>
+                                                        <span style={{ padding: '4px 8px', borderRadius: '4px', fontSize: '0.85rem', backgroundColor: u.role === 'ADMIN' ? '#e74c3c' : '#3498db', color: '#fff' }}>
+                                                            {u.role}
+                                                        </span>
+                                                    </td>
+                                                    <td style={{ padding: '12px', textAlign: 'center' }}>
+                                                        {u.role !== 'ADMIN' && (
+                                                            <button onClick={() => handleDeleteUser(u.id, u.username)} style={{ color: '#e74c3c', border: 'none', background: 'none', cursor: 'pointer' }}>Xóa</button>
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
                         </>
                     )}
                 </div>
             </div>
 
-            {/* PRODUCT MODAL (Giữ nguyên logic form) */}
+            {/* PRODUCT MODAL */}
             {isProductModalOpen && (
                 <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
                     <div style={{ backgroundColor: '#fff', padding: '30px', borderRadius: '10px', width: '500px' }}>
