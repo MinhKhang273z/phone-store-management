@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { resolveProductImage } from '../utils/imageResolver';
 import './ProductCard.css';
 
 const ProductCard = ({ product }) => {
@@ -20,7 +21,7 @@ const ProductCard = ({ product }) => {
 
     addToCart(product);
     // Hiệu ứng nhẹ hoặc thông báo cho người dùng
-    alert(`🎯 Đã thêm "${product.name}" vào giỏ hàng!`);
+    alert(`Đã thêm "${product.name}" vào giỏ hàng!`);
   };
 
   const handleViewDetail = (e) => {
@@ -32,7 +33,7 @@ const ProductCard = ({ product }) => {
     <div className="product-card" onClick={handleViewDetail}>
       <div className="product-image-container">
         <img 
-          src={product.image || product.imageUrl} 
+          src={resolveProductImage(product.image)} 
           alt={product.name} 
           className="product-image"
           loading="lazy"

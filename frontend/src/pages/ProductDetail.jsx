@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import productsData from '../data/products';
+import { getProductById } from '../services/api';
+import { resolveProductImage } from '../utils/imageResolver';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -12,12 +13,18 @@ const ProductDetail = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const findProduct = () => {
-            const found = productsData.find(p => p.id === parseInt(id));
-            setProduct(found);
-            setLoading(false);
+        const fetchProduct = async () => {
+            try {
+                setLoading(true);
+                const data = await getProductById(id);
+                setProduct(data);
+            } catch (error) {
+                console.error("Lỗi khi tải chi tiết sản phẩm:", error);
+            } finally {
+                setLoading(false);
+            }
         };
-        findProduct();
+        fetchProduct();
         window.scrollTo(0, 0);
     }, [id]);
 
@@ -77,7 +84,7 @@ const ProductDetail = () => {
                   <div className="pd-media">
                       <div className="pd-image-box">
                           <img 
-                             src={product.image || product.imageUrl} 
+                             src={resolveProductImage(product.image)} 
                              alt={product.name} 
                              className="pd-main-img"
                              onError={(e) => { e.target.src = 'https://via.placeholder.com/600x600?text=No+Image'; }}

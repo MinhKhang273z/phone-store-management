@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { 
     getAllProducts, createProduct, updateProduct, deleteProduct, 
     getAllOrdersApi, updateOrderStatusApi,
-    getAllUsersApi, deleteUserApi
+    getAllUsersApi, deleteUserApi,
+    bulkCreateProducts
 } from '../../services/api';
-import AdminStats from '../../components/AdminStats';
+ import AdminStats from '../../components/AdminStats';
+ import { resolveProductImage, imageModules } from '../../utils/imageResolver';
 
 /**
  * AdminDashboard - Hệ thống quản lý Tổng hợp (Thống kê, Sản phẩm, Đơn hàng, Người dùng)
@@ -26,7 +28,7 @@ const AdminDashboard = () => {
 
     // 3. States Modals/Forms
     const [isProductModalOpen, setIsProductModalOpen] = useState(false);
-    const [currentProduct, setCurrentProduct] = useState({ name: "", price: "", image: "", description: "" });
+    const [currentProduct, setCurrentProduct] = useState({ name: "", price: "", image: "", description: "", quantity: 0 });
     const [isEdit, setIsEdit] = useState(false);
 
     // 4. Kiểm tra quyền Admin & Tải dữ liệu
@@ -73,6 +75,99 @@ const AdminDashboard = () => {
         else await createProduct(currentProduct);
         setIsProductModalOpen(false);
         loadData();
+    };
+
+    const handleSyncAssets = async () => {
+        if (!window.confirm("Bắt đầu đồng bộ toàn bộ ảnh từ folder assets? Các sản phẩm mới sẽ được thêm vào database.")) return;
+        
+        setLoading(true);
+        try {
+            console.log("ImageModules:", imageModules);
+            const totalFiles = Object.keys(imageModules).length;
+            if (totalFiles === 0) {
+                alert("Không tìm thấy ảnh nào trong folder assets/phone!");
+                setLoading(false);
+                return;
+            }
+
+            // Logic lấy danh sách từ folder
+            const brands = ['iphone', 'samsung', 'oppo', 'xiaomi', 'vivo', 'realme', 'nokia', 'motorola', 'tecno'];
+            
+            const newProducts = Object.entries(imageModules).map(([path, module], index) => {
+                const filename = path.split('/').pop();
+                const nameBase = filename.split('.')[0];
+                const name = nameBase
+                    .split('-')
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' ');
+                
+                // Giá ngẫu nhiên cho demo
+                const getRandomPrice = (n) => {
+                    const nl = n.toLowerCase();
+                    if (nl.includes('iphone')) return Math.floor(Math.random() * (45 - 20) + 20) * 1000000;
+                    if (nl.includes('samsung')) return Math.floor(Math.random() * (35 - 15) + 15) * 1000000;
+                    if (nl.includes('nokia')) return Math.floor(Math.random() * (5 - 1) + 1) * 1000000;
+                    return Math.floor(Math.random() * (25 - 5) + 5) * 1000000;
+                };
+
+                return {
+                    name: name,
+                    image: filename,
+                    price: getRandomPrice(name),
+                    description: `${name} là sản phẩm công nghệ đỉnh cao với thiết kế sang trọng và hiệu năng mạnh mẽ.`,
+                    specifications: [
+                        "Màn hình: 6.7 inch Super Retina XDR",
+                        "Chip: A18 Pro / Snapdragon 8 Gen 4",
+                        "RAM: 8GB/12GB",
+                        "Pin: 5000mAh"
+                    ],
+                    quantity: 100 // Mặc định khi đồng bộ
+                };
+            }).filter(p => {
+                // Loại bỏ banners và logo (giống productsData cũ)
+                const nameLower = p.name.toLowerCase();
+                const isJustBrand = brands.includes(nameLower);
+                const isBanner = nameLower.includes('banner');
+                return !isJustBrand && !isBanner;
+            });
+
+            // Lọc bỏ những sản phẩm đã tồn tại trong database (dựa trên tên)
+            const existingNames = products.map(p => p.name.trim().toLowerCase());
+            const filteredNewProducts = newProducts.filter(p => !existingNames.includes(p.name.trim().toLowerCase()));
+
+            console.log(`Tìm thấy total: ${totalFiles}, Sau lọc: ${newProducts.length}, Cần thêm mới: ${filteredNewProducts.length}`);
+
+            if (filteredNewProducts.length === 0) {
+                alert(`Không có sản phẩm mới nào! (Tổng folder: ${newProducts.length}, Đã có trong DB: ${existingNames.length})`);
+            } else {
+                alert(`Đang gửi ${filteredNewProducts.length} sản phẩm lên server...`);
+                await bulkCreateProducts(filteredNewProducts);
+                alert(`Đã đồng bộ thành công ${filteredNewProducts.length} sản phẩm mới!`);
+                await loadData(); // Tải lại danh sách
+            }
+        } catch (error) {
+            console.error("Lỗi đồng bộ:", error);
+            alert("Có lỗi xảy ra khi đồng bộ: " + (error.response?.data?.message || error.message));
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleClearAllProducts = async () => {
+        if (!window.confirm("CẢNH BÁO: Hành động này sẽ xóa TOÀN BỘ sản phẩm trong database. Bạn có chắc chắn muốn dọn dẹp để nạp lại dữ liệu mới?")) return;
+        
+        setLoading(true);
+        try {
+            const deletePromises = products.map(p => deleteProduct(p.id));
+            await Promise.all(deletePromises);
+            alert("Đã dọn dẹp sạch toàn bộ sản phẩm!");
+            await loadData();
+        } catch (error) {
+            console.error("Lỗi khi dọn dẹp:", error);
+            alert("Có lỗi xảy ra khi dọn dẹp sản phẩm.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     // --- LOGIC ĐƠN HÀNG ---
@@ -165,12 +260,28 @@ const AdminDashboard = () => {
                                             onChange={(e) => setSearchTerm(e.target.value)}
                                             style={{ padding: '10px', width: '300px', borderRadius: '5px', border: '1px solid #ddd' }}
                                         />
-                                        <button 
-                                            onClick={() => { setIsEdit(false); setCurrentProduct({ name: "", price: "", image: "/phone/", description: "" }); setIsProductModalOpen(true); }}
-                                            style={{ padding: '10px 20px', backgroundColor: '#2ecc71', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
-                                        >
-                                            + Thêm sản phẩm
-                                        </button>
+                                        <div style={{ display: 'flex', gap: '10px' }}>
+                                            <button 
+                                                onClick={handleClearAllProducts}
+                                                style={{ padding: '10px 20px', backgroundColor: '#e74c3c', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
+                                                title="Xóa sạch toàn bộ sản phẩm để nạp lại"
+                                            >
+                                                🗑️ Dọn dẹp
+                                            </button>
+                                            <button 
+                                                onClick={handleSyncAssets}
+                                                style={{ padding: '10px 20px', backgroundColor: '#3498db', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
+                                                title="Quét folder assets/phone và thêm sản phẩm mới"
+                                            >
+                                                🔄 Đồng bộ Assets
+                                            </button>
+                                            <button 
+                                                onClick={() => { setIsEdit(false); setCurrentProduct({ name: "", price: "", image: "", description: "", quantity: 0 }); setIsProductModalOpen(true); }}
+                                                style={{ padding: '10px 20px', backgroundColor: '#2ecc71', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
+                                            >
+                                                + Thêm sản phẩm
+                                            </button>
+                                        </div>
                                     </div>
                                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                                         <thead>
@@ -178,15 +289,29 @@ const AdminDashboard = () => {
                                                 <th style={{ padding: '12px' }}>Ảnh</th>
                                                 <th style={{ padding: '12px' }}>Tên</th>
                                                 <th style={{ padding: '12px' }}>Giá</th>
+                                                <th style={{ padding: '12px' }}>Số lượng</th>
                                                 <th style={{ padding: '12px', textAlign: 'center' }}>Hành động</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {products.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase())).map(p => (
                                                 <tr key={p.id} style={{ borderBottom: '1px solid #f0f0f0' }}>
-                                                    <td style={{ padding: '12px' }}><img src={p.image} alt="" style={{ width: '40px' }} /></td>
+                                                    <td style={{ padding: '12px' }}>
+                                                        <img src={resolveProductImage(p.image)} alt="" style={{ width: '40px', borderRadius: '4px' }} />
+                                                    </td>
                                                     <td style={{ padding: '12px', fontWeight: '500' }}>{p.name}</td>
                                                     <td style={{ padding: '12px', color: '#e74c3c' }}>{new Intl.NumberFormat('vi-VN').format(p.price)}₫</td>
+                                                    <td style={{ padding: '12px' }}>
+                                                        <span style={{ 
+                                                            padding: '4px 8px', 
+                                                            borderRadius: '4px', 
+                                                            backgroundColor: p.quantity > 10 ? '#d4edda' : p.quantity > 0 ? '#fff3cd' : '#f8d7da',
+                                                            color: p.quantity > 10 ? '#155724' : p.quantity > 0 ? '#856404' : '#721c24',
+                                                            fontWeight: 'bold'
+                                                        }}>
+                                                            {p.quantity}
+                                                        </span>
+                                                    </td>
                                                     <td style={{ padding: '12px', textAlign: 'center' }}>
                                                         <button onClick={() => { setIsEdit(true); setCurrentProduct(p); setIsProductModalOpen(true); }} style={{ marginRight: '10px', color: '#3498db', border: 'none', background: 'none', cursor: 'pointer' }}>Sửa</button>
                                                         <button onClick={() => handleDeleteProduct(p.id)} style={{ color: '#e74c3c', border: 'none', background: 'none', cursor: 'pointer' }}>Xóa</button>
@@ -289,6 +414,7 @@ const AdminDashboard = () => {
                         <form onSubmit={handleProductSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                             <input type="text" placeholder="Tên" value={currentProduct.name} onChange={e => setCurrentProduct({...currentProduct, name: e.target.value})} required style={{ padding: '10px' }} />
                             <input type="number" placeholder="Giá" value={currentProduct.price} onChange={e => setCurrentProduct({...currentProduct, price: e.target.value})} required style={{ padding: '10px' }} />
+                            <input type="number" placeholder="Số lượng" value={currentProduct.quantity} onChange={e => setCurrentProduct({...currentProduct, quantity: parseInt(e.target.value) || 0})} required style={{ padding: '10px' }} />
                             <input type="text" placeholder="Ảnh" value={currentProduct.image} onChange={e => setCurrentProduct({...currentProduct, image: e.target.value})} required style={{ padding: '10px' }} />
                             <textarea placeholder="Mô tả" value={currentProduct.description} onChange={e => setCurrentProduct({...currentProduct, description: e.target.value})} style={{ padding: '10px' }} />
                             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>

@@ -15,20 +15,19 @@ Một giải pháp thương mại điện tử Full-stack hiện đại dành ch
 
 ---
 
-## 🚀 Tính năng chính
-
-Hệ thống cung cấp đầy đủ các tính năng cho cả khách hàng và quản trị viên:
-
 - 🔐 **Xác thực người dùng**: Đăng ký và Đăng nhập bảo mật.
-- 📱 **Danh mục sản phẩm**: Duyệt danh sách các thiết bị di động mới nhất.
-- 🔍 **Chi tiết sản phẩm**: Xem thông số kỹ thuật đầy đủ, hình ảnh và giá cả.
-- 🛒 **Giỏ hàng thông minh**: 
-    - Thêm sản phẩm nhanh chóng.
-    - Tự động gộp các sản phẩm cùng loại và cập nhật số lượng.
-    - Hiển thị hình ảnh sản phẩm trực quan ngay trong giỏ hàng.
-    - Xóa sản phẩm linh hoạt.
+- 📱 **Danh mục sản phẩm Dynamic**: Duyệt danh sách các thiết bị di động được lấy trực tiếp từ database.
+- 🔄 **Đồng bộ Assets thông minh**: Tự động quét và nạp hàng loạt sản phẩm từ thư mục ảnh cục bộ (`assets/phone`) vào hệ thống.
+- 📦 **Quản lý tồn kho**: Theo dõi và cập nhật số lượng hàng (Stock) chính xác cho từng loại máy.
+- 🔍 **Chi tiết sản phẩm**: Xem thông số kỹ thuật đầy đủ, hình ảnh và mô tả chuẩn tiếng Việt.
+- 🛒 **Giỏ hàng hiện đại**: 
+    - Thêm sản phẩm nhanh chóng, tự động gộp và cập nhật số lượng.
+    - Hiển thị hình ảnh sản phẩm trực quan nhờ hệ thống Image Resolver.
 - 📦 **Đặt hàng**: Quy trình thanh toán đơn giản, tự động tính tổng tiền.
-- 🛠️ **Quản trị hệ thống**: Quản lý sản phẩm (Thêm, Xóa, Sửa, Xem chi tiết).
+- 🛠️ **Quản trị hệ thống**: 
+    - Quản lý sản phẩm (Thêm, Xóa, Sửa, Dọn dẹp).
+    - Đồng bộ dữ liệu assets mạnh mẽ.
+    - Thống kê tổng quan đơn hàng và người dùng.
 
 ---
 
@@ -41,9 +40,9 @@ Hệ thống cung cấp đầy đủ các tính năng cho cả khách hàng và 
 - **API Client**: Axios
 
 ### Backend
-- **Framework**: Spring Boot 3.x
+- **Framework**: Spring Boot 3.x / Hibernate 6+
 - **Language**: Java 21
-- **Database**: MySQL 8.0
+- **Database**: MySQL 8.0 (UTF-8 support)
 - **ORM**: Spring Data JPA
 
 ---

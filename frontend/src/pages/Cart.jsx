@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { createOrderApi } from '../services/api';
+import { resolveProductImage } from '../utils/imageResolver';
 import './Cart.css';
 
 const Cart = () => {
@@ -65,7 +66,7 @@ const Cart = () => {
                             <div key={item.id} className="cart-item-card">
                                 <div className="cart-item-image">
                                     <img 
-                                        src={item.imageUrl || `https://via.placeholder.com/150?text=${item.name}`} 
+                                        src={resolveProductImage(item.image)} 
                                         alt={item.name || item.productName} 
                                         onError={(e) => { e.target.src = 'https://via.placeholder.com/100?text=No+Image'; }}
                                     />

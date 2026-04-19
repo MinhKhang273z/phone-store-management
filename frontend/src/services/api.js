@@ -56,10 +56,29 @@ export const getAllProducts = async () => {
   }
 };
 
+export const getProductById = async (id) => {
+  try {
+    logRequest("getProductById", id);
+    const response = await axios.get(`${API_BASE_URL}/products/${id}`);
+    logResponse("getProductById", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi lấy chi tiết sản phẩm:", error);
+    throw error;
+  }
+};
+
 export const createProduct = async (productData) => {
   logRequest("createProduct", productData);
   const res = await axios.post(`${API_BASE_URL}/products`, productData);
   logResponse("createProduct", res.data);
+  return res;
+};
+
+export const bulkCreateProducts = async (productsArray) => {
+  logRequest("bulkCreateProducts", `Count: ${productsArray.length}`);
+  const res = await axios.post(`${API_BASE_URL}/products/bulk`, productsArray);
+  logResponse("bulkCreateProducts", res.data);
   return res;
 };
 

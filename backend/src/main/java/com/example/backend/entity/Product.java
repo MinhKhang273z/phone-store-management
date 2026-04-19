@@ -16,6 +16,7 @@ public class Product {
     private double price;
     private String version;
     private String color;
+    private int quantity; // Mới thêm
     
     @Column(columnDefinition = "TEXT")
     private String description; // Mới thêm
@@ -27,7 +28,7 @@ public class Product {
 
     public Product() {}
 
-    public Product(Long id, String name, String image, double price, String version, String color, List<String> specifications, String description) {
+    public Product(Long id, String name, String image, double price, String version, String color, List<String> specifications, String description, int quantity) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -36,6 +37,7 @@ public class Product {
         this.color = color;
         this.specifications = specifications;
         this.description = description;
+        this.quantity = quantity;
     }
 
     // Getter và Setter
@@ -56,6 +58,9 @@ public class Product {
 
     public String getColor() { return color; }
     public void setColor(String color) { this.color = color; }
+
+    public int getQuantity() { return quantity; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }

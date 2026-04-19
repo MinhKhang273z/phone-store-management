@@ -33,6 +33,12 @@ public class ProductController {
         return productService.saveProduct(product);
     }
 
+    @PostMapping("/bulk")
+    public List<Product> createProductsBulk(@RequestBody List<Product> products) {
+        System.out.println("API Called: POST /api/products/bulk - Count: " + products.size());
+        return productService.saveAllProducts(products);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {
         Product product = productService.getProductById(id);
@@ -45,6 +51,7 @@ public class ProductController {
         product.setPrice(productDetails.getPrice());
         product.setVersion(productDetails.getVersion());
         product.setColor(productDetails.getColor());
+        product.setQuantity(productDetails.getQuantity()); // Cập nhật số lượng
         product.setDescription(productDetails.getDescription()); // Cập nhật mô tả
         product.setSpecifications(productDetails.getSpecifications());
         

@@ -39,16 +39,16 @@ public class DataLoader {
             if (productRepository.count() == 0) {
                 System.out.println("--- Đang khởi tạo dữ liệu sản phẩm mẫu vào Database ---");
                 productRepository.save(new Product(null, "iPhone 16 Pro Max", "/phone/iphone-16-pro-max.jpg", 34990000.0, "256GB", "Titan Sa Mạc", 
-                    Arrays.asList("Màn hình 6.9 inch", "Chip A18 Pro", "Camera 48MP", "Pin 4685mAh"), "Siêu phẩm Apple năm 2024 với màn hình cực lớn và chip A18 Pro mạnh mẽ."));
+                    Arrays.asList("Màn hình 6.9 inch", "Chip A18 Pro", "Camera 48MP", "Pin 4685mAh"), "Siêu phẩm Apple năm 2024 với màn hình cực lớn và chip A18 Pro mạnh mẽ.", 100));
                 
                 productRepository.save(new Product(null, "iPhone 15 Plus", "/phone/iphone-15-plus-128gb.jpg", 22990000.0, "128GB", "Hồng", 
-                    Arrays.asList("Màn hình 6.7 inch", "Chip A16 Bionic", "Camera 48MP", "Cổng USB-C"), "iPhone màn hình lớn, pin cực trâu với mức giá hợp lý."));
+                    Arrays.asList("Màn hình 6.7 inch", "Chip A16 Bionic", "Camera 48MP", "Cổng USB-C"), "iPhone màn hình lớn, pin cực trâu với mức giá hợp lý.", 100));
                 
                 productRepository.save(new Product(null, "Samsung Galaxy S24 Ultra", "/phone/samsung-galaxy-s26-ultra-12gb-256gb.jpg", 29990000.0, "256GB", "Xám Titan", 
-                    Arrays.asList("Màn hình 6.8 inch", "Snapdragon 8 Gen 3", "Camera 200MP", "Bút S-Pen"), "Flagship cao cấp nhất của Samsung với camera zoom 100x và bút S-Pen tiện lợi."));
+                    Arrays.asList("Màn hình 6.8 inch", "Snapdragon 8 Gen 3", "Camera 200MP", "Bút S-Pen"), "Flagship cao cấp nhất của Samsung với camera zoom 100x và bút S-Pen tiện lợi.", 100));
                     
                 productRepository.save(new Product(null, "OPPO Find N3 Flip", "/phone/oppo-find-n3-flip.jpg", 19990000.0, "256GB", "Vàng", 
-                    Arrays.asList("Màn hình gập", "Chip Dimensity 9200", "Camera Hasselblad", "Sạc nhanh 44W"), "Điện thoại gập thời trang với camera chuyên nghiệp từ Hasselblad."));
+                    Arrays.asList("Màn hình gập", "Chip Dimensity 9200", "Camera Hasselblad", "Sạc nhanh 44W"), "Điện thoại gập thời trang với camera chuyên nghiệp từ Hasselblad.", 100));
                 
                 System.out.println("--- Đã khởi tạo xong dữ liệu sản phẩm ---");
             }

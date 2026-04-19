@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ProductCard from '../components/ProductCard';
 import BannerSlider from '../components/BannerSlider';
 import BrandFilter from '../components/BrandFilter';
-import productsData from '../data/products';
+import { getAllProducts } from '../services/api';
 import './Home.css';
 
 const Home = ({ searchTerm }) => {
@@ -12,18 +12,24 @@ const Home = ({ searchTerm }) => {
   const [selectedBrand, setSelectedBrand] = useState('All');
 
   useEffect(() => {
-    // Giả lập thời gian load để có trải nghiệm mượt mà
-    const timer = setTimeout(() => {
-      setProducts(productsData);
-      setLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const data = await getAllProducts();
+        setProducts(data);
+      } catch (error) {
+        console.error("Lỗi khi tải sản phẩm từ backend:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
   }, []);
 
   // Lọc sản phẩm theo từ khóa tìm kiếm và thương hiệu
-  const filteredProducts = products.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes((searchTerm || "").toLowerCase());
-    const matchesBrand = selectedBrand === 'All' || product.name.toLowerCase().includes(selectedBrand.toLowerCase());
+  const filteredProducts = (products || []).filter(product => {
+    const matchesSearch = product?.name?.toLowerCase().includes((searchTerm || "").toLowerCase());
+    const matchesBrand = selectedBrand === 'All' || product?.name?.toLowerCase().includes(selectedBrand.toLowerCase());
     return matchesSearch && matchesBrand;
   });
 

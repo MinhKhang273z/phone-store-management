@@ -27,7 +27,8 @@ export const CartProvider = ({ children }) => {
                         id: item.id, // backend id of CartItem
                         name: item.productName,
                         price: item.price,
-                        quantity: item.quantity
+                        quantity: item.quantity,
+                        image: item.imageUrl // Map imageUrl to image for resolver
                     }));
                     setCartItems(formattedData);
                 } catch (error) {
@@ -65,7 +66,8 @@ export const CartProvider = ({ children }) => {
                 const data = await getCart(userId);
                 setCartItems(data.map(item => ({
                     ...item,
-                    name: item.productName
+                    name: item.productName,
+                    image: item.imageUrl
                 })));
             } catch (error) {
                 console.error("Lỗi thêm vào giỏ hàng server:", error);
@@ -82,7 +84,7 @@ export const CartProvider = ({ children }) => {
                 return [...prevItems, { 
                     ...product, 
                     quantity: 1,
-                    imageUrl: product.image || product.imageUrl
+                    image: product.image // Đảm bảo có trường image cho resolver
                 }];
             });
         }

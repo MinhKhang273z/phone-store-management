@@ -1,6 +1,9 @@
 -- Active: 1775739307459@@localhost@3307@phone_store
-CREATE DATABASE phone_store;
+CREATE DATABASE IF NOT EXISTS phone_store CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE phone_store;
+ALTER DATABASE phone_store CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE products CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE product_specifications CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Bảng người dùng
 CREATE TABLE users (
