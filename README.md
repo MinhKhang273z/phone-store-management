@@ -119,10 +119,19 @@ phone-store-management/
 
 <div align="center">
   <p><b>Trang chủ - Danh mục sản phẩm</b></p>
-  <img src="frontend/src/assets/interface/homepage.png" alt="Trang chủ" style="border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" />
+  <img src="frontend/src/assets/interface/homepage.png" alt="Trang chủ" style="border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" width="800" />
   
   <p><b>Giỏ hàng hiện đại</b></p>
-  <img src="frontend/src/assets/interface/cart.png" alt="Giỏ hàng" style="border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" />
+  <img src="frontend/src/assets/interface/cart.png" alt="Giỏ hàng" style="border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" width="800" />
+
+  <p><b>Quản lý sản phẩm (Admin)</b></p>
+  <img src="frontend/src/assets/interface/quanlysanpham.png" alt="Quản lý sản phẩm" style="border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" width="800" />
+
+  <p><b>Quản lý đơn hàng (Admin)</b></p>
+  <img src="frontend/src/assets/interface/quanlydonhang.png" alt="Quản lý đơn hàng" style="border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" width="800" />
+
+  <p><b>Quản lý người dùng (Admin)</b></p>
+  <img src="frontend/src/assets/interface/quanlynguoidung.png" alt="Quản lý người dùng" style="border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" width="800" />
 </div>
 
 ---
